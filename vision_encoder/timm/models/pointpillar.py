@@ -4,11 +4,34 @@ Credit: Tianwei Yin
 
 from os import stat
 import logging
-from torch_scatter import scatter_mean, scatter_max
 from torch import nn
 from .registry import register_model
 import numpy as np
 import torch
+
+
+def scatter_max(src, index, dim=0):
+    """Drop-in replacement for torch_scatter.scatter_max(src, index, dim=0)
+    using native torch.scatter_reduce_ (avoids needing a CUDA compiler to
+    build the torch_scatter extension)."""
+    assert dim == 0
+    dim_size = int(index.max().item()) + 1
+    out = src.new_full((dim_size, src.size(1)), float("-inf"))
+    index_expanded = index.unsqueeze(-1).expand_as(src)
+    out.scatter_reduce_(0, index_expanded, src, reduce="amax", include_self=True)
+    return out, None
+
+
+def scatter_mean(src, index, dim=0):
+    """Drop-in replacement for torch_scatter.scatter_mean(src, index, dim=0)."""
+    assert dim == 0
+    dim_size = int(index.max().item()) + 1
+    sum_out = src.new_zeros((dim_size, src.size(1)))
+    index_expanded = index.unsqueeze(-1).expand_as(src)
+    sum_out.scatter_reduce_(0, index_expanded, src, reduce="sum", include_self=True)
+    count = src.new_zeros((dim_size,))
+    count.scatter_add_(0, index, torch.ones_like(index, dtype=src.dtype))
+    return sum_out / count.clamp(min=1).unsqueeze(-1)
 
 _logger = logging.getLogger(__name__)
 

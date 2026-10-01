@@ -22,7 +22,7 @@ class LayerNorm(nn.LayerNorm):
 
     def forward(self, x: torch.Tensor):
         orig_type = x.dtype
-        ret = super().forward(x.type(torch.float32))
+        ret = super().forward(x.type(self.weight.dtype))
         return ret.type(orig_type)
 
 @registry.register_model("vicuna_drive")
@@ -98,12 +98,19 @@ class Blip2VicunaDrive(Blip2Base):
             logging.info("freeze vision encoder")
 
 
+        import os as _os
+        _load_in_8bit = _os.environ.get("LMDRIVE_LLM_8BIT", "0") == "1"
+        _llm_kwargs = dict(torch_dtype=torch.float16, low_cpu_mem_usage=True)
+        if _load_in_8bit:
+            _llm_kwargs.update(load_in_8bit=True, device_map={"": 0})
+
         if 'opt' in llm_model:
             self.llm_tokenizer = AutoTokenizer.from_pretrained(llm_model, use_fast=False, truncation_side='left')
-            self.llm_model = OPTForCausalLM.from_pretrained(llm_model, torch_dtype=torch.float16, low_cpu_mem_usage=True)
+            self.llm_model = OPTForCausalLM.from_pretrained(llm_model, **_llm_kwargs)
         else:
             self.llm_tokenizer = LlamaTokenizer.from_pretrained(llm_model, use_fast=False, truncation_side="left")
-            self.llm_model = LlamaForCausalLM.from_pretrained(llm_model, torch_dtype=torch.float16, low_cpu_mem_usage=True)
+            self.llm_model = LlamaForCausalLM.from_pretrained(llm_model, **_llm_kwargs)
+        self._llm_loaded_in_8bit = _load_in_8bit
 
 
         self.llm_tokenizer.add_special_tokens({'pad_token': '[PAD]'})

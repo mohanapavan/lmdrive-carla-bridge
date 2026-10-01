@@ -109,7 +109,7 @@ class PositionEmbeddingSine(nn.Module):
             (pos_y[:, :, :, 0::2].sin(), pos_y[:, :, :, 1::2].cos()), dim=4
         ).flatten(3)
         pos = torch.cat((pos_y, pos_x), dim=3).permute(0, 3, 1, 2)
-        return pos
+        return pos.to(dtype=x.dtype)
 
 
 class TransformerEncoder(nn.Module):
@@ -840,7 +840,7 @@ class Memfuser(nn.Module):
         bs = front_image.shape[0]
 
         tgt = self.position_encoding(
-            torch.ones((bs, 1, 50, 50), device=x["rgb_front"].device)
+            torch.ones((bs, 1, 50, 50), device=x["rgb_front"].device, dtype=x["rgb_front"].dtype)
         )
         tgt = tgt.flatten(2)
         tgt = torch.cat([tgt, self.query_pos_embed.repeat(bs, 1, 1)], 2)

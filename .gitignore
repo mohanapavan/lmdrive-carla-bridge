@@ -1,0 +1,8 @@
+
+# Added for this project's bridge setup
+/carla/
+__pycache__/
+*.pyc
+*.egg-info/
+eval_demo*/
+*.log

@@ -1,0 +1,103 @@
+{
+    "_checkpoint": {
+        "global_record": {
+            "index": -1,
+            "infractions": {
+                "collisions_layout": 0.0,
+                "collisions_pedestrian": 0.0,
+                "collisions_vehicle": 0.1933007335279652,
+                "outside_route_lanes": 0.0966503667639826,
+                "red_light": 0.0,
+                "route_dev": 0.0,
+                "route_timeout": 0.0,
+                "stop_infraction": 0.0,
+                "vehicle_blocked": 0.0
+            },
+            "meta": {},
+            "route_id": -1,
+            "scores": {
+                "score_composed": 35.71105957836648,
+                "score_penalty": 0.3571105957836648,
+                "score_route": 100.0
+            },
+            "status": "Completed"
+        },
+        "progress": [
+            1,
+            1
+        ],
+        "records": [
+            {
+                "index": 0,
+                "infractions": {
+                    "collisions_layout": [],
+                    "collisions_pedestrian": [],
+                    "collisions_vehicle": [
+                        "Agent collided against object with type=vehicle.carlamotors.carlacola and id=349 at (x=20.373, y=329.302, z=0.033), at time=29.200000435113907",
+                        "Agent collided against object with type=vehicle.bmw.grandtourer and id=378 at (x=27.005, y=328.515, z=0.033), at time=31.500000469386578"
+                    ],
+                    "outside_route_lanes": [
+                        "Agent went outside its route lanes for about 1.0 meters (0.8% of the completed route)"
+                    ],
+                    "red_light": [],
+                    "route_dev": [],
+                    "route_timeout": [],
+                    "stop_infraction": [],
+                    "vehicle_blocked": []
+                },
+                "meta": {
+                    "duration_game": 37.15000055357814,
+                    "duration_system": 149.24480628967285,
+                    "route_length": 103.46572221934461
+                },
+                "route_id": "RouteScenario_0",
+                "scores": {
+                    "score_composed": 35.71105957836648,
+                    "score_penalty": 0.3571105957836648,
+                    "score_route": 100.0
+                },
+                "status": "Completed"
+            }
+        ]
+    },
+    "eligible": true,
+    "entry_status": "Finished",
+    "labels": [
+        "Avg. driving score",
+        "Avg. route completion",
+        "Avg. infraction penalty",
+        "Collisions with pedestrians",
+        "Collisions with vehicles",
+        "Collisions with layout",
+        "Red lights infractions",
+        "Stop sign infractions",
+        "Off-road infractions",
+        "Route deviations",
+        "Route timeouts",
+        "Agent blocked"
+    ],
+    "sensors": [
+        "carla_camera",
+        "carla_camera",
+        "carla_camera",
+        "carla_camera",
+        "carla_lidar",
+        "carla_imu",
+        "carla_gnss",
+        "carla_speedometer"
+    ],
+    "values": [
+        "35.711",
+        "100.000",
+        "0.357",
+        "0.000",
+        "0.193",
+        "0.000",
+        "0.000",
+        "0.000",
+        "0.097",
+        "0.000",
+        "0.000",
+        "0.000"
+    ]
+}
